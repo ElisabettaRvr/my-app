@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
