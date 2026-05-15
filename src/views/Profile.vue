@@ -16,15 +16,25 @@ const API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1OGE5MTYwZjQ2MGE1ZjM5NmY5YzIy
 const headers = { Authorization: `Bearer ${API_TOKEN}` }
 
 onMounted(async () => {
-    try {
-        ;[recensioni.value, preferiti.value] = await Promise.all([
-            db.getRecensioniUtente(username),
-            db.getPreferiti(username)
-        ])
-        await loadConsigliati()
-    } finally {
-        loading.value = false
-    }
+  try {
+    preferiti.value = await db.getPreferiti(username)
+  } catch (e) {
+    console.error('Errore preferiti:', e)
+  }
+
+  try {
+    recensioni.value = await db.getRecensioniUtente(username)
+  } catch (e) {
+    console.error('Errore recensioni:', e)
+  }
+
+  try {
+    await loadConsigliati()
+  } catch (e) {
+    console.error('Errore consigliati:', e)
+  }
+
+  loading.value = false
 })
 
 async function loadConsigliati() {
