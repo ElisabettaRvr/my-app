@@ -12,6 +12,7 @@ const movie = ref(null)
 const cast = ref([])
 const recensioni = ref([])
 const loading = ref(true)
+const preferito = ref(false)
 
 const newTesto = ref('')
 const newVoto = ref(5)
@@ -27,6 +28,7 @@ onMounted(async () => {
     ])
     movie.value = mRes.data
     cast.value = cRes.data.cast.slice(0, 8)
+    preferito.value = await db.isPreferito(props.id)
     await loadRecensioni()
   } catch (e) {
     console.error(e)
@@ -34,6 +36,19 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+async function togglePreferito() {
+  if (preferito.value) {
+    await db.removePreferito(props.id)
+    preferito.value = false
+    snackMsg.value = 'Rimosso dai preferiti'
+  } else {
+    await db.addPreferito(props.id, movie.value.title, movie.value.poster_path)
+    preferito.value = true
+    snackMsg.value = 'Aggiunto ai preferiti!'
+  }
+  snackbar.value = true
+}
 
 async function loadRecensioni() {
   recensioni.value = await db.getRecensioni(props.id)
@@ -80,7 +95,16 @@ function formatData(iso) {
           />
         </v-col>
         <v-col cols="12" sm="9">
-          <div class="text-h4 font-weight-bold mb-1">{{ movie.title }}</div>
+          <div class="d-flex align-center justify-space-between mb-1">
+            <div class="text-h4 font-weight-bold">{{ movie.title }}</div>
+            <v-btn
+              :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
+              :color="preferito ? 'red' : 'grey'"
+              variant="text"
+              size="large"
+              @click="togglePreferito"
+            />
+          </div>
           <div class="text-subtitle-1 text-medium-emphasis mb-3">
             {{ movie.release_date?.slice(0, 4) }} •
             {{ movie.runtime }} min •

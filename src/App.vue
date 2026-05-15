@@ -13,13 +13,13 @@ router.afterEach(() => {
 })
 
 const genres = [
-  { name: 'Azione',             id: 28 },
-  { name: 'Commedia',           id: 35 },
+  { name: 'Azione', id: 28 },
+  { name: 'Commedia', id: 35 },
   { name: 'Commedia Romantica', id: 10749 },
-  { name: 'Thriller',           id: 53 },
-  { name: 'Horror',             id: 27 },
+  { name: 'Thriller', id: 53 },
+  { name: 'Horror', id: 27 },
   { name: 'Bambini & Famiglia', id: 10751 },
-  { name: 'Documentari',        id: 99 }
+  { name: 'Documentari', id: 99 }
 ]
 
 // quando clicco un genere drawer si chiude e va alla pagina search
@@ -49,23 +49,13 @@ function logout() {
       <v-list-item title="Generi" class="py-4" />
       <v-divider />
       <v-list density="compact" nav>
-        <v-list-item
-          v-for="genre in genres"
-          :key="genre.id"
-          :title="genre.name"
-          prepend-icon="mdi-movie-outline"
-          @click="goToGenre(genre.id, genre.name)"
-        />
+        <v-list-item v-for="genre in genres" :key="genre.id" :title="genre.name" prepend-icon="mdi-movie-outline"
+          @click="goToGenre(genre.id, genre.name)" />
       </v-list>
 
       <template #append>
         <v-divider />
-        <v-list-item
-          title="Logout"
-          prepend-icon="mdi-logout"
-          @click="logout"
-          class="mb-2"
-        />
+        <v-list-item title="Logout" prepend-icon="mdi-logout" @click="logout" class="mb-2" />
       </template>
     </v-navigation-drawer>
 
@@ -78,22 +68,17 @@ function logout() {
         </v-btn>
       </v-toolbar-title>
 
-      <v-text-field
-        v-if="authenticated"
-        v-model="searchQuery"
-        placeholder="Cerca film, regista, attore..."
-        variant="solo-filled"
-        density="compact"
-        hide-details
-        class="mx-4"
-        style="max-width: 400px"
-        append-inner-icon="mdi-magnify"
-        @keyup.enter="search"
-        @click:append-inner="search"
-      />
+      <v-text-field v-if="authenticated" v-model="searchQuery" placeholder="Cerca film, regista, attore..."
+        variant="solo-filled" density="compact" hide-details class="mx-4" style="max-width: 400px"
+        append-inner-icon="mdi-magnify" @keyup.enter="search" @click:append-inner="search" />
 
       <v-btn v-if="authenticated" icon to="/" title="Home">
         <v-icon>mdi-home</v-icon>
+      </v-btn>
+
+      <!-- icona profilo per andare su sezione utente -->
+      <v-btn v-if="authenticated" icon to="/profile" title="Profilo">
+        <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
 

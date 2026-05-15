@@ -4,12 +4,14 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import MovieDetail from '@/views/MovieDetail.vue'
 import Search from '@/views/Search.vue'
+import Profile from '@/views/Profile.vue'
 
 const routes = [
   { path: '/',          component: Home,        name: 'Home' },
   { path: '/login',     component: Login,       name: 'Login' },
   { path: '/movie/:id', component: MovieDetail, name: 'MovieDetail', props: true },
-  { path: '/search',    component: Search,      name: 'Search' }
+  { path: '/search',    component: Search,      name: 'Search' },
+  { path: '/profile',   component: Profile,     name: 'Profile' }
 ]
 
 const router = createRouter({
