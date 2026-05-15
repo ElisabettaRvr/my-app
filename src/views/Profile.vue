@@ -107,23 +107,6 @@ function goToMovie(id) {
                 </v-col>
             </v-row>
 
-            <!-- Consigliati -->
-            <div v-if="consigliati.length > 0">
-                <div class="text-h6 font-weight-bold mb-4">🎯 Consigliati per Te</div>
-                <v-row class="mb-8">
-                    <v-col v-for="film in consigliati" :key="film.id" cols="6" sm="4" md="3" lg="2">
-                        <v-card rounded="lg" elevation="2" hover @click="goToMovie(film.id)">
-                            <v-img :src="film.poster_path
-                                ? `https://image.tmdb.org/t/p/w342${film.poster_path}`
-                                : 'https://via.placeholder.com/342x513?text=No+Image'" height="200" cover />
-                            <v-card-title class="text-caption font-weight-bold text-truncate pa-2">
-                                {{ film.title }}
-                            </v-card-title>
-                        </v-card>
-                    </v-col>
-                </v-row>
-            </div>
-
             <!-- Consigliati in base alle recensioni -->
             <div class="text-h6 font-weight-bold mb-4">🎯 Consigliati per Te</div>
             <div v-if="consigliati.length === 0" class="text-medium-emphasis mb-8">
