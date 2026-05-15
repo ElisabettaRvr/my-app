@@ -17,8 +17,15 @@ async function fetchByGenre(genreId, genreName) {
   pageTitle.value = `Genere: ${genreName}`
   try {
     const res = await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?language=it-IT&with_genres=${genreId}&sort_by=popularity.desc`,
-      { headers }
+      `https://api.themoviedb.org/3/discover/movie`,
+      {
+        headers,
+        params: {
+          language: 'it-IT',
+          with_genres: genreId,
+          sort_by: 'popularity.desc'
+        }
+      }
     )
     movies.value = res.data.results
   } catch (e) {
