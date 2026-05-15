@@ -13,19 +13,18 @@ router.afterEach(() => {
 })
 
 const genres = [
-  { name: 'Azione', id: 28 },
-  { name: 'Commedia', id: 35 },
-  { name: 'Commedia Romantica', id: 10749 },
-  { name: 'Thriller', id: 53 },
-  { name: 'Horror', id: 27 },
-  { name: 'Bambini & Famiglia', id: 10751 },
-  { name: 'Documentari', id: 99 }
+  { name: 'Azione',              id: 28 },
+  { name: 'Leggeri e Divertenti', id: 35 },
+  { name: 'Commedia Romantica',  id: 10749 },
+  { name: 'Horror & Thriller',   id: '27,53' },
+  { name: 'Fantascienza',        id: 878 },
+  { name: 'Bambini & Famiglia',  id: 10751 },
 ]
 
 // quando clicco un genere drawer si chiude e va alla pagina search
 function goToGenre(genreId, genreName) {
   drawer.value = false
-  router.push({ name: 'Search', query: { genre: genreId, genreName: genreName } })
+  router.push({ name: 'Search', query: { genreId: String(genreId), genreName } })
 }
 
 // prende testo nella barra e va alla pagina di search

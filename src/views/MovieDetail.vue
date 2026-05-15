@@ -108,7 +108,10 @@ function formatData(iso) {
           <div class="text-subtitle-1 text-medium-emphasis mb-3">
             {{ movie.release_date?.slice(0, 4) }} •
             {{ movie.runtime }} min •
-            <span v-for="g in movie.genres" :key="g.id">{{ g.name }} </span>
+            <span v-for="(g, index) in movie.genres" :key="g.id">
+                {{ g.name }}
+                <span v-if="index < movie.genres.length - 1"> / </span>
+            </span>
           </div>
           <v-chip color="amber" class="mb-4">
             ⭐ {{ movie.vote_average?.toFixed(1) }} / 10
