@@ -35,8 +35,10 @@ function search() {
 }
 
 function logout() {
-  db.logout()
-  router.push('/login')
+  if (confirm('Sei sicuro di voler uscire?')) {
+    db.logout()
+    router.push('/login')
+  }
 }
 </script>
 
