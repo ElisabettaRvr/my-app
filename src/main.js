@@ -12,6 +12,9 @@ const vuetify = createVuetify({
   directives,
 })
 
+// Cancella la sessione ad ogni apertura del sito
+localStorage.removeItem('login')
+
 const app = createApp(App)
 app.use(router)
 app.use(vuetify)
