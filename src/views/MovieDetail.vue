@@ -15,6 +15,7 @@ const cast = ref([])
 const recensioni = ref([])
 const loading = ref(true)
 const preferito = ref(false)
+const inLista = ref(false)
 
 const newTesto = ref('')
 const newVoto = ref(5)
@@ -31,6 +32,7 @@ onMounted(async () => {
         movie.value = mRes.data
         cast.value = cRes.data.cast.slice(0, 8)
         preferito.value = await db.isPreferito(props.id)
+        inLista.value = await db.isMiaLista(props.id)
         await loadRecensioni()
     } catch (e) {
         console.error(e)
@@ -48,6 +50,19 @@ async function togglePreferito() {
         await db.addPreferito(props.id, movie.value.title, movie.value.poster_path)
         preferito.value = true
         snackMsg.value = 'Aggiunto ai preferiti!'
+    }
+    snackbar.value = true
+}
+
+async function toggleLista() {
+    if (inLista.value) {
+        await db.removeMiaLista(props.id)
+        inLista.value = false
+        snackMsg.value = 'Rimosso dalla lista'
+    } else {
+        await db.addMiaLista(props.id, movie.value.title, movie.value.poster_path)
+        inLista.value = true
+        snackMsg.value = 'Aggiunto alla lista!'
     }
     snackbar.value = true
 }
@@ -102,8 +117,14 @@ function formatData(iso) {
                 <v-col cols="12" sm="9">
                     <div class="d-flex align-center justify-space-between mb-1">
                         <div class="text-h4 font-weight-bold">{{ movie.title }}</div>
-                        <v-btn :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'" :color="preferito ? 'red' : 'grey'"
-                            variant="text" size="large" @click="togglePreferito" />
+                        <div class="d-flex align-center">
+                            <v-btn :icon="inLista ? 'mdi-clock' : 'mdi-clock-outline'"
+                                :color="inLista ? 'blue-darken-2' : 'grey'" variant="text" size="large"
+                                @click="toggleLista" />
+                            <v-btn :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
+                                :color="preferito ? 'red' : 'grey'" variant="text" size="large"
+                                @click="togglePreferito" />
+                        </div>
                     </div>
                     <div class="text-subtitle-1 text-medium-emphasis mb-3">
                         {{ movie.release_date?.slice(0, 4) }} •
@@ -169,10 +190,12 @@ function formatData(iso) {
                     <div class="d-flex align-center justify-space-between mb-2">
                         <div class="d-flex align-center gap-2">
                             <v-icon color="red-darken-4">mdi-account-circle</v-icon>
-                            <span class="font-weight-bold">{{ rec.username }}</span>
+                            <span class="font-weight-bold">{{ rec.username }} </span>
+                            <span><v-chip style="font-weight: bold;" color="amber" size="big" class="ms-3"> ⭐ {{
+                                rec.voto }}/10 </v-chip></span>
+
                         </div>
                         <div class="d-flex align-center gap-2">
-                            <v-chip color="amber" size="small">⭐ {{ rec.voto }}/10</v-chip>
                             <span class="text-caption text-medium-emphasis">{{ formatData(rec.data) }}</span>
                         </div>
                     </div>
