@@ -58,7 +58,13 @@ async function submitRecensione() {
   if (!newTesto.value.trim()) return
   submitting.value = true
   try {
-    await db.addRecensione(props.id, movie.value.title, newTesto.value.trim(), newVoto.value)
+    await db.addRecensione(
+      props.id,
+      movie.value.title,
+      newTesto.value.trim(),
+      newVoto.value,
+      movie.value.poster_path
+    )
     newTesto.value = ''
     newVoto.value = 5
     await loadRecensioni()

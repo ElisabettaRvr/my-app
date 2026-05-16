@@ -35,7 +35,7 @@ export default {
   },
 
   // RECENSIONI
-  async addRecensione(movieId, movieTitle, testo, voto) {
+  async addRecensione(movieId, movieTitle, testo, voto, poster_path) {
     const username = this.getUser();
     await addDoc(collection(db, "recensioni"), {
       movieId: String(movieId),
@@ -43,6 +43,7 @@ export default {
       username,
       testo,
       voto: Number(voto),
+      poster_path: poster_path || '',
       data: new Date().toISOString()
     });
   },

@@ -62,26 +62,33 @@ function logout() {
 
     <!-- barra rossa in alto con logo, ricerca e icona della home-->
     <v-app-bar color="red-darken-4" flat elevation="2">
-      <v-app-bar-nav-icon v-if="authenticated" @click="drawer = !drawer" />
-      <v-toolbar-title>
-        <v-btn variant="text" color="white" to="/" class="text-h6" font-weight-bold>
-          MyMovies
-        </v-btn>
-      </v-toolbar-title>
+  <v-app-bar-nav-icon v-if="authenticated" @click="drawer = !drawer" />
+  
+  <v-btn variant="text" color="white" to="/" class="text-h6 font-weight-bold">
+    <v-icon class="mr-2">mdi-home</v-icon>
+    MyMovies
+  </v-btn>
 
-      <v-text-field v-if="authenticated" v-model="searchQuery" placeholder="Cerca film, regista, attore..."
-        variant="solo-filled" density="compact" hide-details class="mx-4" style="max-width: 400px"
-        append-inner-icon="mdi-magnify" @keyup.enter="search" @click:append-inner="search" />
+  <v-spacer />
 
-      <v-btn v-if="authenticated" icon to="/" title="Home">
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
+  <v-text-field
+    v-if="authenticated"
+    v-model="searchQuery"
+    placeholder="Cerca film, regista, attore..."
+    variant="solo-filled"
+    density="compact"
+    hide-details
+    class="mx-4"
+    style="max-width: 400px"
+    append-inner-icon="mdi-magnify"
+    @keyup.enter="search"
+    @click:append-inner="search"
+  />
 
-      <!-- icona profilo per andare su sezione utente -->
-      <v-btn v-if="authenticated" icon to="/profile" title="Profilo">
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
-    </v-app-bar>
+  <v-btn v-if="authenticated" icon to="/profile" title="Profilo">
+    <v-icon>mdi-account</v-icon>
+  </v-btn>
+</v-app-bar>
 
     <v-main>
       <v-container fluid class="pa-6">
