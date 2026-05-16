@@ -109,5 +109,46 @@ export default {
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async addMiaLista(movieId, movieTitle, poster_path) {
+  const username = this.getUser();
+  await addDoc(collection(db, "mialista"), {
+    movieId: String(movieId),
+    movieTitle,
+    poster_path,
+    username,
+    data: new Date().toISOString()
+  });
+},
+async removeMiaLista(movieId) {
+  const username = this.getUser();
+  const q = query(
+    collection(db, "mialista"),
+    where("movieId", "==", String(movieId)),
+    where("username", "==", username)
+  );
+  const snapshot = await getDocs(q);
+  for (const d of snapshot.docs) {
+    await deleteDoc(doc(db, "mialista", d.id));
   }
+},
+async isMiaLista(movieId) {
+  const username = this.getUser();
+  const q = query(
+    collection(db, "mialista"),
+    where("movieId", "==", String(movieId)),
+    where("username", "==", username)
+  );
+  const snapshot = await getDocs(q);
+  return !snapshot.empty;
+},
+async getMiaLista(username) {
+  const q = query(
+    collection(db, "mialista"),
+    where("username", "==", username),
+    orderBy("data", "desc")
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+}
 };
