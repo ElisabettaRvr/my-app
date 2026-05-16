@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs, orderBy, deleteDoc } from "firebase/firestore";
-
 const firebaseConfig = {
   apiKey: "AIzaSyCcB9uCNq944JG9rv2e1DTOiffXL-fF4RU",
   authDomain: "mymovie-app-f55c2.firebaseapp.com",
@@ -64,6 +63,9 @@ export default {
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async deleteRecensione(recensioneId) {
+    await deleteDoc(doc(db, "recensioni", recensioneId))
   },
 
   // PREFERITI

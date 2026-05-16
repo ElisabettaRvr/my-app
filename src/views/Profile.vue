@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import db from '@/firebase'
@@ -12,8 +12,16 @@ const preferiti = ref([])
 const consigliati = ref([])
 const loading = ref(true)
 const recensioniAperte = ref(false)
-const mostraTutti = ref(false)
 const consigliatiVisibili = ref(6)
+
+const userColors = ['#B71C1C', '#1565C0', '#2E7D32', '#6A1B9A', '#E65100', '#00695C']
+const userColor = computed(() => {
+  let hash = 0
+  for (let i = 0; i < (username || '').length; i++) {
+    hash = (username.charCodeAt(i) + hash) % userColors.length
+  }
+  return userColors[hash]
+})
 
 const API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1OGE5MTYwZjQ2MGE1ZjM5NmY5YzIyODVkNmJmNmZkNyIsIm5iZiI6MTc3ODU3NzkxOC4xNzcsInN1YiI6IjZhMDJmMWZlYzUzYjc1ZjAxMGUxNTUxOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UBN5vY4IWlhbriLUUeJrQAoNIqXO3nMNs4odaBZbmuA'
 const headers = { Authorization: `Bearer ${API_TOKEN}` }
@@ -61,7 +69,7 @@ async function loadConsigliati() {
       return m.poster_path
     })
     .sort((a, b) => b.popularity - a.popularity)
-    .slice(0, 12)
+    .slice(0, 24)
 }
 
 function formatData(iso) {
@@ -71,13 +79,20 @@ function formatData(iso) {
 function goToMovie(id) {
   router.push(`/movie/${id}`)
 }
+
+async function eliminaRecensione(id) {
+  if (confirm('Vuoi eliminare questa recensione?')) {
+    await db.deleteRecensione(id)
+    recensioni.value = recensioni.value.filter(r => r.id !== id)
+  }
+}
 </script>
 
 <template>
   <div>
     <!-- Header profilo -->
     <div class="mb-8" style="display: flex; align-items: center; gap: 16px;">
-      <v-icon size="56" color="red-darken-4">mdi-account-circle</v-icon>
+      <v-icon size="56" :color="userColor">mdi-account-circle</v-icon>
       <div>
         <div class="text-h4 font-weight-bold">Il tuo Profilo</div>
         <div class="text-subtitle-1 text-medium-emphasis">{{ username }}</div>
@@ -88,67 +103,73 @@ function goToMovie(id) {
 
     <div v-else>
 
-    <!-- Le mie recensioni (accordion) -->
-    <!-- Le mie recensioni (accordion) -->
-<v-card class="mb-8" elevation="1" rounded="lg">
-  <div
-    class="d-flex align-center justify-space-between pa-4"
-    style="cursor: pointer"
-    @click="recensioniAperte = !recensioniAperte"
-  >
-    <span class="text-h6 font-weight-bold">📝 Le mie Recensioni ({{ recensioni.length }})</span>
-    <v-icon>{{ recensioniAperte ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-  </div>
-
-  <v-expand-transition>
-    <div v-if="recensioniAperte">
-      <v-divider />
-      <div style="max-height: 300px; overflow-y: auto;" class="pa-4">
-
-        <div v-if="recensioni.length === 0" class="text-medium-emphasis text-center py-4">
-          Non hai ancora scritto recensioni.
+      <!-- Le mie recensioni (accordion) -->
+      <v-card class="mb-8" elevation="1" rounded="lg">
+        <div
+          class="d-flex align-center justify-space-between pa-4"
+          style="cursor: pointer"
+          @click="recensioniAperte = !recensioniAperte"
+        >
+          <span class="text-h6 font-weight-bold">📝 Le mie Recensioni ({{ recensioni.length }})</span>
+          <v-icon>{{ recensioniAperte ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
         </div>
 
-        <v-card
-          v-for="rec in recensioni"
-          :key="rec.id"
-          class="mb-3"
-          elevation="0"
-          rounded="lg"
-          color="grey-lighten-4"
-          hover
-          @click="goToMovie(rec.movieId)"
-        >
-          <div class="d-flex align-center" style="height: 80px; overflow: hidden;">
-            <img
-              :src="rec.poster_path
-                ? `https://image.tmdb.org/t/p/w92${rec.poster_path}`
-                : 'https://via.placeholder.com/54x80?text=N/D'"
-              style="width: 54px; min-width: 54px; height: 80px; object-fit: cover; border-radius: 8px 0 0 8px;"
-            />
-            <div
-              class="d-flex flex-column justify-space-between px-3 py-2"
-              style="flex: 1; overflow: hidden;"
-            >
-              <div class="d-flex align-center justify-space-between gap-2">
-                <span class="font-weight-bold text-body-2 text-truncate">{{ rec.movieTitle }}</span>
-                <v-chip color="amber" size="x-small" class="flex-shrink-0">⭐ {{ rec.voto }}/10</v-chip>
+        <v-expand-transition>
+          <div v-if="recensioniAperte">
+            <v-divider />
+            <div style="max-height: 300px; overflow-y: auto;" class="pa-4">
+
+              <div v-if="recensioni.length === 0" class="text-medium-emphasis text-center py-4">
+                Non hai ancora scritto recensioni.
               </div>
-              <p
-                class="text-caption text-medium-emphasis my-1"
-                style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+
+              <v-card
+                v-for="rec in recensioni"
+                :key="rec.id"
+                class="mb-3"
+                elevation="0"
+                rounded="lg"
+                color="grey-lighten-4"
+                hover
+                @click="goToMovie(rec.movieId)"
               >
-                {{ rec.testo }}
-              </p>
-              <span class="text-caption text-medium-emphasis">{{ formatData(rec.data) }}</span>
+                <div class="d-flex pa-3" style="gap: 12px;">
+                  <img
+                    :src="rec.poster_path
+                      ? `https://image.tmdb.org/t/p/w92${rec.poster_path}`
+                      : 'https://via.placeholder.com/54x80?text=N/D'"
+                    style="width: 54px; min-width: 54px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                  />
+                  <div class="d-flex flex-column" style="flex: 1; overflow: hidden;">
+                    <!-- Titolo + data -->
+                    <div class="d-flex align-center justify-space-between">
+                      <span class="font-weight-bold text-body-2 text-truncate">{{ rec.movieTitle }}</span>
+                      <span class="text-caption text-medium-emphasis flex-shrink-0 ml-2">{{ formatData(rec.data) }}</span>
+                    </div>
+                    <!-- Stelle -->
+                    <v-chip color="amber" size="x-small" class="my-1" style="width: fit-content;">
+                      ⭐ {{ rec.voto }}/10
+                    </v-chip>
+                    <!-- Testo recensione -->
+                    <p class="text-caption text-medium-emphasis" style="flex: 1;">{{ rec.testo }}</p>
+                    <!-- Cestino in basso a destra -->
+                    <div class="d-flex justify-end">
+                      <v-btn
+                        icon="mdi-delete"
+                        size="x-small"
+                        variant="text"
+                        color="red"
+                        @click.stop="eliminaRecensione(rec.id)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </v-card>
+
             </div>
           </div>
-        </v-card>
-
-      </div>
-    </div>
-  </v-expand-transition>
-</v-card>
+        </v-expand-transition>
+      </v-card>
 
       <!-- Preferiti -->
       <div class="text-h6 font-weight-bold mb-4">❤️ Film Preferiti ({{ preferiti.length }})</div>
@@ -156,11 +177,7 @@ function goToMovie(id) {
         Non hai ancora aggiunto film ai preferiti.
       </div>
       <v-row class="mb-8">
-        <v-col
-          v-for="film in preferiti"
-          :key="film.movieId"
-          cols="6" sm="4" md="3" lg="2"
-        >
+        <v-col v-for="film in preferiti" :key="film.movieId" cols="6" sm="4" md="3" lg="2">
           <v-card rounded="lg" elevation="2" hover @click="goToMovie(film.movieId)">
             <v-img
               :src="film.poster_path
@@ -207,7 +224,7 @@ function goToMovie(id) {
         <v-btn
           variant="outlined"
           color="red-darken-4"
-          @click="consigliatiVisibili = consigliatiVisibili === 6 ? 12 : 6"
+          @click="consigliatiVisibili = consigliatiVisibili === 6 ? 18 : 6"
         >
           {{ consigliatiVisibili === 6 ? 'Carica altri consigli' : 'Mostra meno' }}
         </v-btn>

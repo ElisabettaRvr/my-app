@@ -21,6 +21,7 @@ const genres = [
   { name: 'Bambini & Famiglia',  id: 10751 },
 ]
 
+
 // quando clicco un genere drawer si chiude e va alla pagina search
 function goToGenre(genreId, genreName) {
   drawer.value = false
@@ -86,8 +87,8 @@ function logout() {
   />
 
   <v-btn v-if="authenticated" icon to="/profile" title="Profilo">
-    <v-icon>mdi-account</v-icon>
-  </v-btn>
+  <v-icon>mdi-account</v-icon>
+</v-btn>
 </v-app-bar>
 
     <v-main>
