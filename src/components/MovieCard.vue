@@ -87,6 +87,7 @@ function getGenre(movie) {
         :color="inLista ? 'blue-darken-2' : 'grey'"
         variant="text"
         size="small"
+        class="icon-btn"
         @click="toggleLista"
       />
       <v-btn
@@ -94,6 +95,7 @@ function getGenre(movie) {
         :color="preferito ? 'red' : 'grey'"
         variant="text"
         size="small"
+        class="icon-btn"
         @click="togglePreferito"
       />
     </v-card-actions>
@@ -106,6 +108,12 @@ function getGenre(movie) {
   transition: transform 0.2s;
 }
 .movie-card:hover {
-  transform: translateY(-4px);
+  transform: scale(1.03);
+}
+.icon-btn {
+  transition: filter 0.2s;
+}
+.icon-btn:hover {
+  filter: brightness(0.6);
 }
 </style>

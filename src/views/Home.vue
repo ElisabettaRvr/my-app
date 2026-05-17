@@ -26,7 +26,7 @@ onMounted(async () => {
   } catch (e) {
     console.error(e)
   } finally {
-    loading.value = false
+    loading.value = false // quando i dati sono arrivati, disabilita il caricamento
   }
 })
 

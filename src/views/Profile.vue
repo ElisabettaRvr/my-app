@@ -10,10 +10,10 @@ const username = db.getUser()
 const recensioni = ref([])
 const preferiti = ref([])
 const consigliati = ref([])
+const miaLista = ref([])
 const loading = ref(true)
 const recensioniAperte = ref(false)
 const consigliatiVisibili = ref(6)
-const miaLista = ref([])
 
 const userColors = ['#B71C1C', '#1565C0', '#2E7D32', '#6A1B9A', '#E65100', '#00695C']
 const userColor = computed(() => {
@@ -43,12 +43,12 @@ onMounted(async () => {
     } catch (e) {
         console.error('Errore consigliati:', e)
     }
-    loading.value = false;
     try {
         miaLista.value = await db.getMiaLista(username)
     } catch (e) {
         console.error('Errore mia lista:', e)
     }
+    loading.value = false
 })
 
 async function loadConsigliati() {
@@ -92,17 +92,29 @@ async function eliminaRecensione(id) {
         recensioni.value = recensioni.value.filter(r => r.id !== id)
     }
 }
+
+function logout() {
+  if (confirm('Sei sicuro di voler uscire?')) {
+    db.logout()
+    router.push('/login')
+  }
+}
 </script>
 
 <template>
     <div>
         <!-- Header profilo -->
-        <div class="mb-8" style="display: flex; align-items: center; gap: 16px;">
-            <v-icon size="56" :color="userColor">mdi-account-circle</v-icon>
-            <div>
-                <div class="text-h4 font-weight-bold">Il tuo Profilo</div>
-                <div class="text-subtitle-1 text-medium-emphasis">{{ username }}</div>
+        <div class="d-flex align-center justify-space-between mb-8">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <v-icon size="56" :color="userColor">mdi-account-circle</v-icon>
+                <div>
+                    <div class="text-h4 font-weight-bold">Il tuo Profilo</div>
+                    <div class="text-subtitle-1 text-medium-emphasis">{{ username }}</div>
+                </div>
             </div>
+            <v-btn color="red-darken-4" prepend-icon="mdi-logout" @click="logout">
+                Logout
+            </v-btn>
         </div>
 
         <v-skeleton-loader v-if="loading" type="article" />
@@ -137,7 +149,7 @@ async function eliminaRecensione(id) {
                                         <!-- Titolo + data -->
                                         <div class="d-flex align-center justify-space-between">
                                             <span class="font-weight-bold text-body-2 text-truncate">{{ rec.movieTitle
-                                                }}</span>
+                                            }}</span>
                                             <span class="text-caption text-medium-emphasis flex-shrink-0 ml-2">{{
                                                 formatData(rec.data) }}</span>
                                         </div>
