@@ -141,10 +141,13 @@ function logout() {
                             <v-card v-for="rec in recensioni" :key="rec.id" class="mb-3" elevation="0" rounded="lg"
                                 color="grey-lighten-4" hover @click="goToMovie(rec.movieId)">
                                 <div class="d-flex pa-3" style="gap: 12px;">
-                                    <img :src="rec.poster_path
-                                        ? `https://image.tmdb.org/t/p/w92${rec.poster_path}`
-                                        : 'https://via.placeholder.com/54x80?text=N/D'"
-                                        style="width: 54px; min-width: 54px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" />
+                                    <img
+                                        :src="rec.poster_path
+                                            ? `https://image.tmdb.org/t/p/w92${rec.poster_path}`
+                                            : 'https://via.placeholder.com/54x80?text=N/D'"
+                                        :alt="`Poster del film ${rec.movieTitle}`"
+                                        style="width: 54px; min-width: 54px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                                    />
                                     <div class="d-flex flex-column" style="flex: 1; overflow: hidden;">
                                         <!-- Titolo + data -->
                                         <div class="d-flex align-center justify-space-between">
@@ -162,8 +165,14 @@ function logout() {
                                         </p>
                                         <!-- Cestino in basso a destra -->
                                         <div class="d-flex justify-end">
-                                            <v-btn icon="mdi-delete" size="x-small" variant="text" color="red"
-                                                @click.stop="eliminaRecensione(rec.id)" />
+                                            <v-btn
+                                                icon="mdi-delete"
+                                                size="x-small"
+                                                variant="text"
+                                                color="red"
+                                                aria-label="Elimina recensione"
+                                                @click.stop="eliminaRecensione(rec.id)"
+                                            />
                                         </div>
                                     </div>
                                 </div>

@@ -61,12 +61,14 @@ function getGenre(movie) {
     class="movie-card"
   >
     <v-img
-      :src="movie.poster_path
-        ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-        : 'https://via.placeholder.com/342x513?text=No+Image'"
-      height="280"
-      cover
+        :src="movie.poster_path
+            ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+            : 'https://via.placeholder.com/342x513?text=No+Image'"
+        :alt="`Poster del film ${movie.title}`"
+        height="280"
+        cover
     />
+
 
     <v-card-title class="text-body-1 font-weight-bold text-truncate pt-3 pb-0">
       {{ movie.title }}
@@ -83,21 +85,23 @@ function getGenre(movie) {
       </v-chip>
       <v-spacer />
       <v-btn
-        :icon="inLista ? 'mdi-clock' : 'mdi-clock-outline'"
-        :color="inLista ? 'blue-darken-2' : 'grey'"
-        variant="text"
-        size="small"
-        class="icon-btn"
-        @click="toggleLista"
-      />
-      <v-btn
-        :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
-        :color="preferito ? 'red' : 'grey'"
-        variant="text"
-        size="small"
-        class="icon-btn"
-        @click="togglePreferito"
-      />
+            :icon="inLista ? 'mdi-clock' : 'mdi-clock-outline'"
+            :color="inLista ? 'blue-darken-2' : 'grey'"
+            variant="text"
+            size="small"
+            class="icon-btn"
+            :aria-label="inLista ? 'Rimuovi dalla lista' : 'Aggiungi alla lista'"
+            @click="toggleLista"
+        />
+        <v-btn
+            :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
+            :color="preferito ? 'red' : 'grey'"
+            variant="text"
+            size="small"
+            class="icon-btn"
+            :aria-label="preferito ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'"
+            @click="togglePreferito"
+        />
     </v-card-actions>
   </v-card>
 </template>

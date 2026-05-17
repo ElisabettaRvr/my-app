@@ -35,7 +35,7 @@ async function login() {
                 <div class="text-h4 font-weight-bold">🎬 MyMovies</div>
                 <div class="text-subtitle-1 text-medium-emphasis">Accedi al tuo account</div>
             </div>
-            <v-alert v-if="errore" type="error" class="mb-4" density="compact">
+            <v-alert v-if="errore" type="error" class="mb-4" density="compact" aria-live="assertive">
                 {{ errore }}
             </v-alert>
             <v-text-field v-model.trim="username" label="Username" prepend-inner-icon="mdi-account" variant="outlined"

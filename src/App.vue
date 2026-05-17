@@ -97,13 +97,14 @@ function logout() {
         <v-icon>mdi-account</v-icon>
       </v-btn>
 
-      <v-btn v-if="authenticated" variant="text" color="white" @click="toggleDark">
+      <v-btn v-if="authenticated" variant="text" color="white"
+        :aria-label="isDark ? 'Passa a Light Mode' : 'Passa a Dark Mode'" @click="toggleDark">
         <v-icon class="mr-1">{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
         {{ isDark ? 'Light Mode' : 'Dark Mode' }}
       </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main role="main">
       <v-container fluid class="pa-6">
         <RouterView />
       </v-container>
@@ -120,5 +121,11 @@ function logout() {
 .navbar-btn:hover {
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 8px;
+}
+
+:focus-visible {
+  outline: 3px solid white !important;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 </style>

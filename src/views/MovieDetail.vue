@@ -110,20 +110,35 @@ function formatData(iso) {
             <!-- Hero del film -->
             <v-row class="mb-6">
                 <v-col cols="12" sm="3">
-                    <v-img :src="movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-                        : 'https://via.placeholder.com/342x513?text=No+Image'" rounded="lg" cover />
+                    <v-img
+                        :src="movie.poster_path
+                            ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                            : 'https://via.placeholder.com/342x513?text=No+Image'"
+                        :alt="`Poster del film ${movie.title}`"
+                        rounded="lg"
+                        cover
+                    />
                 </v-col>
                 <v-col cols="12" sm="9">
                     <div class="d-flex align-center justify-space-between mb-1">
                         <div class="text-h4 font-weight-bold">{{ movie.title }}</div>
                         <div class="d-flex align-center">
-                            <v-btn :icon="inLista ? 'mdi-clock' : 'mdi-clock-outline'"
-                                :color="inLista ? 'blue-darken-2' : 'grey'" variant="text" size="large"
-                                @click="toggleLista" />
-                            <v-btn :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
-                                :color="preferito ? 'red' : 'grey'" variant="text" size="large"
-                                @click="togglePreferito" />
+                            <v-btn
+                            :icon="preferito ? 'mdi-heart' : 'mdi-heart-outline'"
+                            :color="preferito ? 'red' : 'grey'"
+                            variant="text"
+                            size="large"
+                            :aria-label="preferito ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'"
+                            @click="togglePreferito"
+                            />
+                            <v-btn
+                            :icon="inLista ? 'mdi-clock' : 'mdi-clock-outline'"
+                            :color="inLista ? 'blue-darken-2' : 'grey'"
+                            variant="text"
+                            size="large"
+                            :aria-label="inLista ? 'Rimuovi dalla lista' : 'Aggiungi alla lista'"
+                            @click="toggleLista"
+                            />
                         </div>
                     </div>
                     <div class="text-subtitle-1 text-medium-emphasis mb-3">
@@ -206,5 +221,5 @@ function formatData(iso) {
         </div>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="3000">{{ snackMsg }}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="3000" aria-live="polite">{{ snackMsg }}</v-snackbar>
 </template>
