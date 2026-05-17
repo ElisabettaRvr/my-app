@@ -57,7 +57,7 @@ function logout() {
 
       <template #append>
         <v-divider />
-        <v-list-item title="Logout" prepend-icon="mdi-logout" @click="logout" class="mb-2" />
+        <v-list-item title="Logout" prepend-icon="mdi-logout" @click="logout" class="mb-2 text-red" base-color="red" />
       </template>
     </v-navigation-drawer>
 
@@ -65,7 +65,7 @@ function logout() {
     <v-app-bar color="red-darken-4" flat elevation="2">
   <v-app-bar-nav-icon v-if="authenticated" @click="drawer = !drawer" />
   
-  <v-btn variant="text" color="white" to="/" class="text-h6 font-weight-bold">
+  <v-btn variant="text" color="white" to="/" class="text-h6 font-weight-bold navbar-btn">
     <v-icon class="mr-2">mdi-home</v-icon>
     MyMovies
   </v-btn>
@@ -86,7 +86,7 @@ function logout() {
     @click:append-inner="search"
   />
 
-  <v-btn v-if="authenticated" icon to="/profile" title="Profilo">
+  <v-btn v-if="authenticated" icon to="/profile" title="Profilo" class="navbar-btn">
   <v-icon>mdi-account</v-icon>
 </v-btn>
 </v-app-bar>
