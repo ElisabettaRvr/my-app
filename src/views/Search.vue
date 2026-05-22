@@ -35,6 +35,7 @@ async function fetchByGenre(genreId, genreName) {
         loading.value = false
     }
 }
+
 async function fetchByQuery(q) {
     loading.value = true
     pageTitle.value = `Risultati per: "${q}"`

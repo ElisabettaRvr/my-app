@@ -6,7 +6,7 @@ import router from '@/router'
 const username = ref('')
 const password = ref('')
 const errore = ref('')
-const loading = ref(false);
+const loading = ref(false); //true mentre attende Firebase
 const showPassword = ref(false)
 
 async function login() {

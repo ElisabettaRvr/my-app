@@ -120,6 +120,8 @@ export default {
     data: new Date().toISOString()
   });
 },
+
+// LISTA
 async removeMiaLista(movieId) {
   const username = this.getUser();
   const q = query(
