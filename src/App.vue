@@ -104,6 +104,7 @@ function logout() {
       </v-btn>
     </v-app-bar>
 
+    <!--area principale dove vengono caricate le singole pagine-->
     <v-main role="main">
       <v-container fluid class="pa-6">
         <RouterView />

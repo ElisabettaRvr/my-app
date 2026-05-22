@@ -15,6 +15,8 @@ const vuetify = createVuetify({
   }
 })
 
+localStorage.removeItem('login') //login ogni volta che si ricarica il sito
+
 const app = createApp(App)
 app.use(router)
 app.use(vuetify)
